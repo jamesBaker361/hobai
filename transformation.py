@@ -4,5 +4,5 @@ class Transformation:
     def __init__(self):
         pass
 
-    def transform(self,patch: tensor, x: int, y: int) -> tensor:
+    def transform(self,patch: tensor, patch_size: int) -> tensor:
         return patch
