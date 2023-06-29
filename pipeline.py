@@ -43,11 +43,11 @@ class Pipeline:
                 patch = img.crop((x, y, x + patch_size, y + patch_size))
                 patches.append(patch)
 
-        big_tensor=stack([ToTensor()(p) for p in patches])
+        patches_tensor=stack([ToTensor()(p) for p in patches])
         for transformation in self.transformation_list:
-            big_tensor=transformation(big_tensor, patch_size=patch_size)
+            patches_tensor=transformation(patches_tensor, patch_size=patch_size)
 
-        new_patches = [ToPILImage()(big_tensor[i]) for i in range(big_tensor.size(0))]
+        new_patches = [ToPILImage()(patches_tensor[i]) for i in range(patches_tensor.size(0))]
 
         recombined_img = Image.new("RGB", (width, height))
 
