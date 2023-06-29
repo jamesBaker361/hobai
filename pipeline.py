@@ -6,12 +6,16 @@ from torchvision.transforms import ToTensor, ToPILImage
 
 
 class Pipeline:
-    def __init__(self, transformations: List[Transformation], patch_sizes: List[int]):
-        self.transformations=transformations
+    def __init__(self, transformation_list: List[Transformation], patch_sizes: List[int]):
+        self.transformation_list=transformation_list
         self.patch_sizes=patch_sizes
 
-    def __call__(self, img: Image.Image) -> Any:
-        pass
+    def __call__(self, img: Image.Image) -> List[Image.Image]:
+        transformed_img_list=[]
+        for p in self.patch_sizes:
+            transformed_img_list.append(img, p)
+
+        return transformed_img_list
 
     def pad_img(self, img: Image.Image, patch_size: int) -> List[Image.Image]:
         width, height = img.size
@@ -38,7 +42,7 @@ class Pipeline:
                 patches.append(patch)
 
         big_tensor=stack([ToTensor()(p) for p in patches])
-        for transformation in self.transformations:
+        for transformation in self.transformation_list:
             big_tensor=transformation(big_tensor, patch_size=patch_size)
 
         new_patches = [ToPILImage()(big_tensor[i]) for i in range(big_tensor.size(0))]
