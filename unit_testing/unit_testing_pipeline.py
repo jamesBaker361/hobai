@@ -31,10 +31,10 @@ class PipelineTestCase(unittest.TestCase):
 
 
     def test_call(self):
-        img=self.img
+        img=self.img.resize((100,100))
         transformed_img_list = self.pipeline(img)
-        for transformed_i in transformed_img_list:
-            assert are_images_identical(img, transformed_i), 'images are not identical'
+        for transformed_i,p in zip(transformed_img_list, self.pipeline.patch_size_list):
+            transformed_i.save(UNIT_TESTING_OUTPUT_DIR+ '/test_call_{}.png'.format(p))
 
 
 

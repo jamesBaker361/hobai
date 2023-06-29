@@ -13,7 +13,8 @@ class Pipeline:
     def __call__(self, img: Image.Image) -> List[Image.Image]:
         transformed_img_list=[]
         for p in self.patch_size_list:
-            transformed_img=self.patch_and_transform(img=img, patch_size=p)
+            padded_img=self.pad_img(img=img, patch_size=p)
+            transformed_img=self.patch_and_transform(img=padded_img, patch_size=p)
             transformed_img_list.append(transformed_img)
 
         return transformed_img_list
