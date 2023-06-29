@@ -6,14 +6,15 @@ from torchvision.transforms import ToTensor, ToPILImage
 
 
 class Pipeline:
-    def __init__(self, transformation_list: List[Transformation], patch_sizes: List[int]):
+    def __init__(self, transformation_list: List[Transformation], patch_size_list: List[int]):
         self.transformation_list=transformation_list
-        self.patch_sizes=patch_sizes
+        self.patch_size_list=patch_size_list
 
     def __call__(self, img: Image.Image) -> List[Image.Image]:
         transformed_img_list=[]
-        for p in self.patch_sizes:
-            transformed_img_list.append(img, p)
+        for p in self.patch_size_list:
+            transformed_img=self.patch_and_transform(img=img, patch_size=p)
+            transformed_img_list.append(transformed_img)
 
         return transformed_img_list
 
