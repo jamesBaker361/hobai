@@ -1,6 +1,8 @@
 from typing import Any, List
 from PIL import Image
+from torch import tensor,stack
 from transformation import Transformation
+from torchvision.transforms import ToTensor, ToPILImage
 
 
 class Pipeline:
@@ -8,10 +10,10 @@ class Pipeline:
         self.transformations=transformations
         self.patch_sizes=patch_sizes
 
-    def __call__(self, img: Image) -> Any:
+    def __call__(self, img: Image.Image) -> Any:
         pass
 
-    def pad_img(self, img: Image, patch_size: int) -> Image:
+    def pad_img(self, img: Image.Image, patch_size: int) -> List[Image.Image]:
         width, height = img.size
 
         # Calculate the amount of padding needed
@@ -25,3 +27,29 @@ class Pipeline:
         padded_img.paste(img, (0, 0))
 
         return padded_img
+
+    def patch_and_transform(self, img: Image.Image, patch_size: int) -> List[Image.Image]:
+        patches = []
+        width, height = img.size
+
+        for y in range(0, height - patch_size + 1, patch_size):
+            for x in range(0, width - patch_size + 1, patch_size):
+                patch = img.crop((x, y, x + patch_size, y + patch_size))
+                patches.append(patch)
+
+        big_tensor=stack([ToTensor()(p) for p in patches])
+        for transformation in self.transformations:
+            big_tensor=transformation(big_tensor, patch_size=patch_size)
+
+        new_patches = [ToPILImage()(big_tensor[i]) for i in range(big_tensor.size(0))]
+
+        recombined_img = Image.new("RGB", (width, height))
+
+        patch_index = 0
+        for y in range(0, height - patch_size + 1, patch_size):
+            for x in range(0, width - patch_size + 1, patch_size):
+                transformed_patch = new_patches[patch_index]
+                recombined_img.paste(transformed_patch, (x, y))
+                patch_index += 1
+
+        return recombined_img
