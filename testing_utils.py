@@ -1,5 +1,7 @@
 from PIL import Image
 
+UNIT_TESTING_OUTPUT_DIR='unit_testing_output'
+
 def are_images_identical(image1: Image.Image, image2: Image.Image) -> bool:
     # Compare image sizes
     if image1.size != image2.size:
