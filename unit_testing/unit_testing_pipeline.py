@@ -26,10 +26,10 @@ class PipelineTestCase(unittest.TestCase):
     def setUp(self):
         self.patch_sizes=[32,64,128,256]
         self.pipeline=Pipeline([Transformation()],self.patch_sizes)
+        self.img=Image.open('cat.png')
 
     def test_pad_img(self):
-        img=Image.open('cat.png')
-        img=img.resize((min(self.patch_sizes)-1,max(self.patch_sizes)+1))
+        img=self.img.resize((min(self.patch_sizes)-1,max(self.patch_sizes)+1))
         for p in self.patch_sizes:
             padded_img=self.pipeline.pad_img(img, p)
             width,height=padded_img.size
@@ -37,12 +37,19 @@ class PipelineTestCase(unittest.TestCase):
             assert width%p==0 and height%p==0, 'incorrectly resized image to {} x {}'.format(width,height)
 
     def test_patch_and_transform(self):
-        img=Image.open('cat.png')
-        img.resize((max(self.patch_sizes), max(self.patch_sizes)))
+        img=self.img.resize((max(self.patch_sizes), max(self.patch_sizes)))
         for p in self.patch_sizes:
             recombined_img=self.pipeline.patch_and_transform(img, p)
             recombined_img.save(UNIT_TESTING_OUTPUT_DIR+ '/test_patch_and_transform_img_{}.png'.format(p))
             assert are_images_identical(img, recombined_img), 'recombined images are not identical'
+
+
+    def test_call(self):
+        img=self.img
+        transformed_img_list = self.pipeline(img)
+        for transformed_i in transformed_img_list:
+            assert are_images_identical(img, transformed_i), 'recombined images are not identical'
+
 
 
 if __name__=='__main__':
