@@ -3,24 +3,10 @@ import os
 import torch
 sys.path.append(os.getcwd())
 from pipeline import *
+from testing_utils import *
 import unittest
 
 UNIT_TESTING_OUTPUT_DIR='unit_testing_output'
-
-def are_images_identical(image1: Image.Image, image2: Image.Image) -> bool:
-    # Compare image sizes
-    if image1.size != image2.size:
-        return False
-
-    # Compare image modes
-    if image1.mode != image2.mode:
-        return False
-
-    # Compare pixel data
-    pixel_data1 = list(image1.getdata())
-    pixel_data2 = list(image2.getdata())
-
-    return pixel_data1 == pixel_data2
 
 class PipelineTestCase(unittest.TestCase):
     def setUp(self):
@@ -48,7 +34,7 @@ class PipelineTestCase(unittest.TestCase):
         img=self.img
         transformed_img_list = self.pipeline(img)
         for transformed_i in transformed_img_list:
-            assert are_images_identical(img, transformed_i), 'recombined images are not identical'
+            assert are_images_identical(img, transformed_i), 'images are not identical'
 
 
 
