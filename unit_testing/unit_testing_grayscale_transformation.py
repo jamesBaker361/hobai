@@ -14,7 +14,7 @@ class GrayscaleTransformationTestCase(unittest.TestCase):
 
     def test_call(self):
         transformed_img=self.pipeline(self.img)[0]
-        transformed_img.save(UNIT_TESTING_OUTPUT_DIR+'/test_call.png')
+        transformed_img.save(UNIT_TESTING_OUTPUT_DIR+'/test_grayscale_call.png')
 
 if __name__=='__main__':
     unittest.main() # run all tests
