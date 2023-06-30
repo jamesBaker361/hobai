@@ -1,6 +1,6 @@
 from torch import tensor, from_numpy, stack
 import numpy as np
-from transformation import Transformation
+from transformations.transformation import Transformation
 import cv2
 
 class CannySketchTransformation(Transformation):

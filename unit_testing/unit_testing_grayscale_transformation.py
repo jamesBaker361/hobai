@@ -3,7 +3,7 @@ import os
 import torch
 sys.path.append(os.getcwd())
 from pipeline import *
-from grayscale_transformation import *
+from transformations.grayscale_transformation import *
 from testing_utils import *
 import unittest
 

@@ -1,7 +1,7 @@
 from typing import Any, List
 from PIL import Image
 from torch import tensor,stack
-from transformation import Transformation
+from transformations.transformation import Transformation
 from torchvision.transforms import ToTensor, ToPILImage
 
 

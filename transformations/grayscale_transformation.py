@@ -1,6 +1,6 @@
 from torch import tensor
 from torchvision.transforms import Grayscale
-from transformation import Transformation
+from transformations.transformation import Transformation
 
 class GrayscaleTransformation(Transformation):
 
