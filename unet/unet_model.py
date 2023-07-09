@@ -101,7 +101,7 @@ class UNet(nn.Module):
     
 class UNetDiscriminator(UNet):
     def __init__(self, in_channels=3, out_channels=3, init_features=32):
-        super(UNet, self).__init__(in_channels=in_channels, out_channels=out_channels, init_features=init_features)
+        super().__init__(in_channels=in_channels, out_channels=out_channels, init_features=init_features)
         self.flatten=nn.Conv2d(init_features*16,1,4,padding=1)
         self.activation=nn.Sigmoid()
 
