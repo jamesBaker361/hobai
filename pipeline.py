@@ -9,6 +9,7 @@ class Pipeline:
     def __init__(self, transformation_list: List[Transformation], patch_size_list: List[int]):
         self.transformation_list=transformation_list
         self.patch_size_list=patch_size_list
+        self.incremental_list=[]
 
     def __call__(self, img: Image.Image) -> List[Image.Image]:
         transformed_img_list=[]
@@ -49,13 +50,19 @@ class Pipeline:
 
         new_patches = [ToPILImage()(patches_tensor[i]) for i in range(patches_tensor.size(0))]
 
-        recombined_img = Image.new("RGB", (width, height))
+        recombined_img = img.copy()
+
+        new_incremental=[img.copy()]
 
         patch_index = 0
         for y in range(0, height - patch_size + 1, patch_size):
             for x in range(0, width - patch_size + 1, patch_size):
                 transformed_patch = new_patches[patch_index]
                 recombined_img.paste(transformed_patch, (x, y))
+                new_incremental.append(recombined_img.copy())
                 patch_index += 1
-
+        self.incremental_list.append(new_incremental)
         return recombined_img
+    
+    def get_incremental_list(self):
+        return self.incremental_list

@@ -3,7 +3,9 @@ import os
 import torch
 sys.path.append(os.getcwd())
 from pipeline import *
+from transformations.grayscale_transformation import *
 from testing_utils import *
+import imageio
 import unittest
 
 UNIT_TESTING_OUTPUT_DIR='unit_testing_output'
@@ -35,6 +37,21 @@ class PipelineTestCase(unittest.TestCase):
         transformed_img_list = self.pipeline(img)
         for transformed_i,p in zip(transformed_img_list, self.pipeline.patch_size_list):
             transformed_i.save(UNIT_TESTING_OUTPUT_DIR+ '/test_call_{}.png'.format(p))
+
+    def test_get_incremental_list(self):
+        dims=[64,128]
+        incremental_pipeline=Pipeline([GrayscaleTransformation()],dims)
+        incremental_pipeline(self.img)
+        incrementals = incremental_pipeline.get_incremental_list()
+        for x in range(len(dims)):
+            incremental=incrementals[x]
+            output_path='unit_testing_output/incremental_call_{}.gif'.format(dims[x])
+            # Save the images as frames of the GIF
+            with imageio.get_writer(output_path, mode='I') as writer:
+                for img in incremental:
+                    writer.append_data(img)
+
+        
 
 
 
