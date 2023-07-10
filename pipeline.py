@@ -16,12 +16,15 @@ class Pipeline:
         for p in self.patch_size_list:
             padded_img=self.pad_img(img=img, patch_size=p)
             transformed_img=self.patch_and_transform(img=padded_img, patch_size=p)
+            transformed_img=transformed_img.crop((0,0,self.width,self.height))
             transformed_img_list.append(transformed_img)
 
         return transformed_img_list
 
     def pad_img(self, img: Image.Image, patch_size: int) -> List[Image.Image]:
         width, height = img.size
+        self.width=width
+        self.height=height
 
         # Calculate the amount of padding needed
         pad_width = (width // patch_size + 1) * patch_size - width

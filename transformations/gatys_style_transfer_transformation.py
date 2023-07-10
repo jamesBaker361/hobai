@@ -33,10 +33,9 @@ def tf_to_pytorch(tf_images):
 
 def get_img(path):
     # Load the image using PIL
-    image = Image.open(path)
-
-    # Convert the image to a numpy array
-    image_array = np.array(image).astype(np.float32)/255
+    with Image.open(path) as image:
+        # Convert the image to a numpy array
+        image_array = np.array(image).astype(np.float32)/255
 
     # Convert the numpy array to a TensorFlow tensor
     tensor_image = tf.convert_to_tensor(image_array)

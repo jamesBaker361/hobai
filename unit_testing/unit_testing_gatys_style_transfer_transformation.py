@@ -50,7 +50,7 @@ class GatysStyleTransferTransformationTestCase(unittest.TestCase):
 
     def test_call(self):
         gatys_style_transfer_transformation = GatysStyleTransferTransformation("cat.png")
-        dims=[32,64,128,256,512]
+        dims=[32,64,128,256,512,1024]
         pipeline = Pipeline([gatys_style_transfer_transformation], dims)
         content_img=Image.open('robert.jpg')
         for x,dim in enumerate(dims):
