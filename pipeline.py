@@ -6,17 +6,19 @@ from torchvision.transforms import ToTensor, ToPILImage
 
 
 class Pipeline:
-    def __init__(self, transformation_list: List[Transformation], patch_size_list: List[int]):
+    def __init__(self, transformation_list: List[Transformation], patch_size_list: List[int], crop:bool=True):
         self.transformation_list=transformation_list
         self.patch_size_list=patch_size_list
         self.incremental_list=[]
+        self.crop=crop
 
     def __call__(self, img: Image.Image) -> List[Image.Image]:
         transformed_img_list=[]
         for p in self.patch_size_list:
             padded_img=self.pad_img(img=img, patch_size=p)
             transformed_img=self.patch_and_transform(img=padded_img, patch_size=p)
-            transformed_img=transformed_img.crop((0,0,self.width,self.height))
+            if self.crop:
+                transformed_img=transformed_img.crop((0,0,self.width,self.height))
             transformed_img_list.append(transformed_img)
 
         return transformed_img_list
