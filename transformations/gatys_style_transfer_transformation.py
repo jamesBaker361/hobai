@@ -31,7 +31,7 @@ def tf_to_pytorch(tf_images):
 
     return torch_images
 
-def get_img(path):
+def get_img(path: str):
     # Load the image using PIL
     with Image.open(path) as image:
         # Convert the image to a numpy array
@@ -45,7 +45,7 @@ def get_img(path):
     return tf.image.resize_with_pad(tensor_image, *(256, 256))
 
 class GatysStyleTransferTransformation(Transformation):
-    def __init__(self, style_image_path):
+    def __init__(self, style_image_path: str):
         self.style_image_path=style_image_path
         self.style_image=get_img(style_image_path)
         self.hub_module = hub.load('https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2')
