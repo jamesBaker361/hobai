@@ -64,7 +64,10 @@ class Pipeline:
             for x in range(0, width - patch_size + 1, patch_size):
                 transformed_patch = new_patches[patch_index]
                 recombined_img.paste(transformed_patch, (x, y))
-                new_incremental.append(recombined_img.copy().crop((0,0,self.width,self.height)))
+                if self.crop:
+                    new_incremental.append(recombined_img.copy().crop((0,0,self.width,self.height)))
+                else:
+                    new_incremental.append(recombined_img.copy())
                 patch_index += 1
         self.incremental_list.append(new_incremental)
         return recombined_img
